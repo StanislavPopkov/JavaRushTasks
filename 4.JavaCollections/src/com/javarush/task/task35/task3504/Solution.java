@@ -13,7 +13,7 @@ public class Solution<T extends HashMap> {
         this.map = map;
     }
 
-    public HashMap getMap() {
+    public T getMap() {
         return map;
     }
 
