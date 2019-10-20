@@ -5,12 +5,9 @@ import java.util.List;
 
 public class Model {
 
-    public List<String> getData() {
-        List<String> data = new ArrayList<String>() {{
-            add("First string");
-            add("Second string");
-            add("Third string");
-        }};
-        return data;
+    Service service = new Service();
+
+    public List<String> getStringDataList() {
+        return service.getData();
     }
 }

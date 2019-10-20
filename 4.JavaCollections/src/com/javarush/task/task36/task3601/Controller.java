@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Controller {
 
-    Service service = new Service();
+    Model model = new Model();
 
     public List<String> onShowDataList() {
-        return service.getStringDataList();
+        return model.getStringDataList();
     }
 }
