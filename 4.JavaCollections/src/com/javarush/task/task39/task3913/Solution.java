@@ -16,13 +16,16 @@ public class Solution {
         Date date1 = null;
         Date date2 = null;
         try {
-            date1 = parser.parse("04.01.2014 03:45:23");
+            date1 = parser.parse("04.01.2012 03:45:23");
             date2 = parser.parse("04.01.2021 20:22:55");
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.println(logParser.getIPsForUser("Eduard Petrovich Morozko", date1,date2));
-        System.out.println(logParser.getIPsForEvent(Event.LOGIN, null, null));
-        System.out.println(logParser.getIPsForStatus(Status.OK, null, null));
+//        System.out.println(logParser.getIPsForUser("Eduard Petrovich Morozko", date1,date2));
+//        System.out.println(logParser.getIPsForEvent(Event.LOGIN, null, null));
+//        System.out.println(logParser.getIPsForStatus(Status.OK, null, null));
+        System.out.println(logParser.getSolvedTaskUsers( null, null));
+        System.out.println(logParser.getDateWhenUserLoggedFirstTime( "Eduard Petrovich Morozko", null,null));
+
     }
 }
