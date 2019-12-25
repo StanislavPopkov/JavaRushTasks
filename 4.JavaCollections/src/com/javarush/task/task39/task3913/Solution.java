@@ -26,6 +26,6 @@ public class Solution {
 //        System.out.println(logParser.getIPsForStatus(Status.OK, null, null));
         System.out.println(logParser.getSolvedTaskUsers( null, null));
         System.out.println(logParser.getDateWhenUserLoggedFirstTime( "Eduard Petrovich Morozko", null,null));
-
+        System.out.println(logParser.getNumberOfSuccessfulAttemptToSolveTask(15,null,null));
     }
 }

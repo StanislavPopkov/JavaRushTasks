@@ -1,6 +1,7 @@
 package com.javarush.task.task39.task3913;
 
 import com.javarush.task.task39.task3913.query.DateQuery;
+import com.javarush.task.task39.task3913.query.EventQuery;
 import com.javarush.task.task39.task3913.query.IPQuery;
 import com.javarush.task.task39.task3913.query.UserQuery;
 
@@ -15,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LogParser implements IPQuery, UserQuery, DateQuery {
+public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
     private Path logdir;
 
     public LogParser(Path logDir) {
@@ -484,6 +485,12 @@ public class LogParser implements IPQuery, UserQuery, DateQuery {
         } else {
             return null;
         }
+//        return logRecords.stream()
+//                .filter(r -> условия фильтрации)
+//                .map(LogRecord::getDate)
+//                .sorted()
+//                .findFirst()
+//                .orElse(null);
     }
 
     @Override
@@ -570,5 +577,144 @@ public class LogParser implements IPQuery, UserQuery, DateQuery {
             }
         }
         return dates;
+    }
+
+    @Override
+    public int getNumberOfAllEvents(Date after, Date before) {
+        return getAllEvents(after, before).size();
+    }
+
+    @Override
+    public Set<Event> getAllEvents(Date after, Date before) {
+        Set<Event> allEvent = new HashSet<>();
+        List<String> listLogs = readAllLogs();
+        for (String line : listLogs) {
+            String[] strSplit = line.split("\\t");
+            String[] eventSplit = strSplit[3].split("\\s");
+            Date date = getDate(strSplit);
+            boolean isBetweenDate = isBetweenDate(after, before, date);
+            if (isBetweenDate) {
+                allEvent.add(Event.valueOf(eventSplit[0]));
+            }
+        }
+        return allEvent;
+    }
+
+    @Override
+    public Set<Event> getEventsForIP(String ip, Date after, Date before) {
+        Set<Event> allEvent = new HashSet<>();
+        List<String> listLogs = readAllLogs();
+        for (String line : listLogs) {
+            String[] strSplit = line.split("\\t");
+            String[] eventSplit = strSplit[3].split("\\s");
+            Date date = getDate(strSplit);
+            boolean isBetweenDate = isBetweenDate(after, before, date);
+            if (ip.equals(strSplit[0]) & isBetweenDate) {
+                allEvent.add(Event.valueOf(eventSplit[0]));
+            }
+        }
+        return allEvent;
+    }
+
+    @Override
+    public Set<Event> getEventsForUser(String user, Date after, Date before) {
+        Set<Event> allEvent = new HashSet<>();
+        List<String> listLogs = readAllLogs();
+        for (String line : listLogs) {
+            String[] strSplit = line.split("\\t");
+            String[] eventSplit = strSplit[3].split("\\s");
+            Date date = getDate(strSplit);
+            boolean isBetweenDate = isBetweenDate(after, before, date);
+            if (user.equals(strSplit[1]) & isBetweenDate) {
+                allEvent.add(Event.valueOf(eventSplit[0]));
+            }
+        }
+        return allEvent;
+    }
+
+    @Override
+    public Set<Event> getFailedEvents(Date after, Date before) {
+        Set<Event> allEvent = new HashSet<>();
+        List<String> listLogs = readAllLogs();
+        for (String line : listLogs) {
+            String[] strSplit = line.split("\\t");
+            String[] eventSplit = strSplit[3].split("\\s");
+            Date date = getDate(strSplit);
+            boolean isBetweenDate = isBetweenDate(after, before, date);
+            if (strSplit[strSplit.length-1].equals(Status.FAILED.toString()) & isBetweenDate) {
+                allEvent.add(Event.valueOf(eventSplit[0]));
+            }
+        }
+        return allEvent;
+    }
+
+    @Override
+    public Set<Event> getErrorEvents(Date after, Date before) {
+        Set<Event> allEvent = new HashSet<>();
+        List<String> listLogs = readAllLogs();
+        for (String line : listLogs) {
+            String[] strSplit = line.split("\\t");
+            String[] eventSplit = strSplit[3].split("\\s");
+            Date date = getDate(strSplit);
+            boolean isBetweenDate = isBetweenDate(after, before, date);
+            if (strSplit[strSplit.length-1].equals(Status.ERROR.toString()) & isBetweenDate) {
+                allEvent.add(Event.valueOf(eventSplit[0]));
+            }
+        }
+        return allEvent;
+    }
+
+    @Override
+    public int getNumberOfAttemptToSolveTask(int task, Date after, Date before) {
+        Map<Integer, Integer> map = getAllSolvedTasksAndTheirNumber(after, before);
+        if (!map.isEmpty() & map.containsKey(task)) {
+            return map.get(task);
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public int getNumberOfSuccessfulAttemptToSolveTask(int task, Date after, Date before) {
+        Map<Integer, Integer> map = getAllDoneTasksAndTheirNumber(after, before);
+        if (!map.isEmpty() & map.containsKey(task)) {
+            return map.get(task);
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public Map<Integer, Integer> getAllSolvedTasksAndTheirNumber(Date after, Date before) {
+        Map<Integer, Integer> map = new HashMap<>();
+        List<String> listLogs = readAllLogs();
+        for (String line : listLogs) {
+            String[] strSplit = line.split("\\t");
+            String[] eventSplit = strSplit[3].split("\\s");
+            Date date = getDate(strSplit);
+            boolean isBetweenDate = isBetweenDate(after, before, date);
+            if (eventSplit[0].equals(Event.SOLVE_TASK.toString()) & isBetweenDate) {
+                Integer value = map.getOrDefault(Integer.parseInt(eventSplit[1]), 0) + 1;
+                map.put(Integer.parseInt(eventSplit[1]), value);
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public Map<Integer, Integer> getAllDoneTasksAndTheirNumber(Date after, Date before) {
+        Map<Integer, Integer> map = new HashMap<>();
+        List<String> listLogs = readAllLogs();
+        for (String line : listLogs) {
+            String[] strSplit = line.split("\\t");
+            String[] eventSplit = strSplit[3].split("\\s");
+            Date date = getDate(strSplit);
+            boolean isBetweenDate = isBetweenDate(after, before, date);
+            if (eventSplit[0].equals(Event.DONE_TASK.toString()) & isBetweenDate) {
+                Integer value = map.getOrDefault(Integer.parseInt(eventSplit[1]), 0) + 1;
+                map.put(Integer.parseInt(eventSplit[1]), value);
+            }
+        }
+        return map;
     }
 }
