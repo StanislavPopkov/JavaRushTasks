@@ -1,7 +1,6 @@
 package com.javarush.task.task39.task3913;
 
 import com.javarush.task.task39.task3913.query.DateQuery;
-import com.javarush.task.task39.task3913.query.EventQuery;
 import com.javarush.task.task39.task3913.query.IPQuery;
 import com.javarush.task.task39.task3913.query.UserQuery;
 
@@ -16,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
+public class LogParser implements IPQuery, UserQuery, DateQuery {
     private Path logdir;
 
     public LogParser(Path logDir) {
@@ -579,12 +578,12 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         return dates;
     }
 
-    @Override
+
     public int getNumberOfAllEvents(Date after, Date before) {
         return getAllEvents(after, before).size();
     }
 
-    @Override
+
     public Set<Event> getAllEvents(Date after, Date before) {
         Set<Event> allEvent = new HashSet<>();
         List<String> listLogs = readAllLogs();
@@ -600,7 +599,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         return allEvent;
     }
 
-    @Override
     public Set<Event> getEventsForIP(String ip, Date after, Date before) {
         Set<Event> allEvent = new HashSet<>();
         List<String> listLogs = readAllLogs();
@@ -616,7 +614,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         return allEvent;
     }
 
-    @Override
     public Set<Event> getEventsForUser(String user, Date after, Date before) {
         Set<Event> allEvent = new HashSet<>();
         List<String> listLogs = readAllLogs();
@@ -632,7 +629,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         return allEvent;
     }
 
-    @Override
     public Set<Event> getFailedEvents(Date after, Date before) {
         Set<Event> allEvent = new HashSet<>();
         List<String> listLogs = readAllLogs();
@@ -648,7 +644,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         return allEvent;
     }
 
-    @Override
     public Set<Event> getErrorEvents(Date after, Date before) {
         Set<Event> allEvent = new HashSet<>();
         List<String> listLogs = readAllLogs();
@@ -664,7 +659,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         return allEvent;
     }
 
-    @Override
+
     public int getNumberOfAttemptToSolveTask(int task, Date after, Date before) {
         Map<Integer, Integer> map = getAllSolvedTasksAndTheirNumber(after, before);
         if (!map.isEmpty() & map.containsKey(task)) {
@@ -674,7 +669,7 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         }
     }
 
-    @Override
+
     public int getNumberOfSuccessfulAttemptToSolveTask(int task, Date after, Date before) {
         Map<Integer, Integer> map = getAllDoneTasksAndTheirNumber(after, before);
         if (!map.isEmpty() & map.containsKey(task)) {
@@ -684,7 +679,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         }
     }
 
-    @Override
     public Map<Integer, Integer> getAllSolvedTasksAndTheirNumber(Date after, Date before) {
         Map<Integer, Integer> map = new HashMap<>();
         List<String> listLogs = readAllLogs();
@@ -701,7 +695,6 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery {
         return map;
     }
 
-    @Override
     public Map<Integer, Integer> getAllDoneTasksAndTheirNumber(Date after, Date before) {
         Map<Integer, Integer> map = new HashMap<>();
         List<String> listLogs = readAllLogs();

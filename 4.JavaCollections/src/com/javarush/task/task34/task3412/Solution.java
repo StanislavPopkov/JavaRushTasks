@@ -28,7 +28,7 @@ public class Solution {
     }
 
     public void calculateAndSetValue3(long value) {
-        logger.trace("metod calculateAndSetValue3, param="+value);
+        logger.info("metod calculateAndSetValue3, param="+value);
         value -= 133;
         if (value > Integer.MAX_VALUE) {
             value1 = (int) (value / Integer.MAX_VALUE);
@@ -40,21 +40,21 @@ public class Solution {
     }
 
     public void printString() {
-        logger.trace("metod printString log, value2.length()="+value2.length());
+        logger.info("metod printString log, value2.length()="+value2.length());
         if (value2 != null) {
             System.out.println(value2.length());
         }
     }
 
     public void printDateAsLong() {
-        logger.trace("metod printDateAsLong log, value3.getTime()="+value3.getTime());
+        logger.info("metod printDateAsLong log, value3.getTime()="+value3.getTime());
         if (value3 != null) {
             System.out.println(value3.getTime());
         }
     }
 
     public void divide(int number1, int number2) {
-        logger.trace("method divide, number1 / number2 ="+number1 / number2);
+        logger.info("method divide, number1 / number2 ="+number1 / number2);
         try {
             System.out.println(number1 / number2);
         } catch (ArithmeticException e) {

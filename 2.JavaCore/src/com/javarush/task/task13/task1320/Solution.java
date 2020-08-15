@@ -24,8 +24,8 @@ public class Solution {
             User u = this;
             return u;
         }
-        //User(){
-        //}
+        User(){
+        }
         User(long id, String name){
             this.id = id;
             this.name = name;
